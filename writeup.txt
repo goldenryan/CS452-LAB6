@@ -1,0 +1,13 @@
+Shaddow mapping is done in two basic steps:
+
+1.The scene is rendered from the point of view of the light and the depth of each fragment is computed
+a.set up the MVP matracies so you can render based on the light's point of view.  The projection matrix is an orthographic matrix that will encompass everything in the visible scene.  The view matrix rotates the world so the light direction is -Z. The model matrix is set up however you like.
+b.The shaders used are simple. The vertex computes the position in homogeneuos coordinates. The fragment shader writes the depth of a fragment at location 0.
+c.Your shadow map is calculated and used in the next step.
+
+
+2.The scene is rendered as usual, but with test to see if the fragment is in the shadow
+a.Calculate each fragment to see if it is behind the shadow map, by multiplying the vertex position by the depth of MVP.
+b.The vertex shader calculates 2 positions instead of one now, the position of the vertex in the current camera and the shadow coordinate(the one calculated by the last step.
+c.The fragment shader calculates the distance between the light and the neerest occluder and the distance between the light and the current fragment. If the Fragment is further than the neerest occluder then it is in the shadow
+d.Your final image is rendered
